@@ -1,7 +1,7 @@
 from pygame import *
 mixer.init()
 FPS = 60
-WIDTH, HEIGHT = 700, 525
+WIDTH, HEIGHT = 702, 525
 window = display.set_mode((WIDTH, HEIGHT))
 mixer.music.load('model\music\Forest.ogg')
 mixer.music.play()
@@ -30,12 +30,27 @@ class Player(GameSprite):
             self.rect.x -= 3
         if pressed[K_d]:
             self.rect.x += 3
+class grass(GameSprite):
+    def __init__(self, x , y, ):
+        super().__init__('model\map\Floor_sand_stone_3.png', x, y, 32, 32)
 
 
-bg = transform.scale(image.load("model\map\grass_1_new.png"), (WIDTH, HEIGHT))
-player = Player('model\player\centaur_brown_female.png', 40 , 350, 30, 30)
+bg = transform.scale(image.load("model\map\grass_1_new"), (WIDTH, HEIGHT))
+player = Player('model\player\centaur_brown_female.png', 0 , 0, 30, 30)
+
+Grass = []
 
 
+with open('map\map_x0_y0.txt', 'r') as file:
+    x, y = 0, 0
+    map = file.readlines()
+    for line in map:
+        for symbol in line:
+            if symbol == 'G':
+                Grass.append(grass(x, y))
+            x += 35
+        y += 35
+        x = 0
 
 run = True
 clock = time.Clock()
@@ -46,6 +61,8 @@ while run:
         if e.type == QUIT:
             run = False
     window.blit(bg, (0, 0))
+    for g in Grass:
+        g.draw()
     player.update()
     player.draw()
     display.update()
