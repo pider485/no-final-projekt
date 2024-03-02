@@ -1,7 +1,7 @@
 from pygame import *
 mixer.init()
 FPS = 60
-WIDTH, HEIGHT = 702, 525
+WIDTH, HEIGHT = 700, 525
 window = display.set_mode((WIDTH, HEIGHT))
 mixer.music.load('model\music\Forest.ogg')
 mixer.music.play()
@@ -32,10 +32,10 @@ class Player(GameSprite):
             self.rect.x += 3
 class grass(GameSprite):
     def __init__(self, x , y, ):
-        super().__init__('model\map\Floor_sand_stone_3.png', x, y, 32, 32)
+        super().__init__('model\map\grass_1_new.png', x, y, 35, 35)
 
 
-bg = transform.scale(image.load("model\map\grass_1_new"), (WIDTH, HEIGHT))
+bg = transform.scale(image.load("model\map\grass_1_new.png"), (WIDTH, HEIGHT))
 player = Player('model\player\centaur_brown_female.png', 0 , 0, 30, 30)
 
 Grass = []
