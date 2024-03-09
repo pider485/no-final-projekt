@@ -59,7 +59,6 @@ grass = []
 objects = []
 walss = []
 
-
 map_txt='map\map_x'+ map_X +'_y' + map_Y +'.txt'
 with open(map_txt, 'r') as file:
     x, y = 0, 0
@@ -92,9 +91,7 @@ while run:
         map_X += 1
         map_X = str(map_X)
         player.rect.x = 700 - 35
-        for g in grass:
-            grass.clear(g)
-            
+        grass.clear()
         with open(map_txt, 'r') as file:
             x, y = 0, 0
             map = file.readlines()
@@ -129,5 +126,9 @@ while run:
                 y += 35
                 x = 0
         print(map_X)
+    if player.rect.y <= -5:
+        player.rect.y = 500
+    if player.rect.y >= 505:
+        player.rect.y = 0
     display.update()
     clock.tick(FPS)
