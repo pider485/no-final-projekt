@@ -7,7 +7,7 @@ mixer.music.load('model\music\Forest.ogg')
 mixer.music.play()
 mixer.music.set_volume(1)
 count = 0
-
+attaks = []
 sprites = sprite.Group()
 
 class GameSprite(sprite.Sprite):
@@ -39,6 +39,18 @@ class Player(GameSprite):
         if pressed[K_d]:
             self.rect.x += 3
 
+        if pressed[K_UP]:
+            attak=Attak('model\wepon\effect\icicle_up.png',self.rect.x,self.rect.y,32,32,'up')
+            attaks.append(attak)
+        if pressed[K_DOWN]:
+            attak=Attak('model\wepon\effect\icicle_down.png',self.rect.x,self.rect.y,32,32,'down')
+            attaks.append(attak)
+        if pressed[K_RIGHT]:
+            attak=Attak('model\wepon\effect\icicle_right.png',self.rect.x,self.rect.y,32,32,'right')
+            attaks.append(attak)
+        if pressed[K_LEFT]:
+            attak=Attak('model\wepon\effect\icicle_left.png',self.rect.x,self.rect.y,32,32,'left')
+            attaks.append(attak)
         for w in walss:
             if sprite.collide_rect(player, w):
                 self.rect.x, self.rect.y = old_pos
@@ -51,6 +63,21 @@ class Grass(GameSprite):
         self.view = view
         if view == "Winter":
             self.image=transform.scale(image.load("model\map\cobble_blood_2_old.png"), (35,35))
+
+class Attak(GameSprite):
+    def __init__(self, sprite_img, x, y, width, height,move):
+        super().__init__(sprite_img, x, y, width, height)
+        self.move= move
+    def update(self):
+        if self.move == 'up':
+            self.rect.y -=10
+        if self.move == 'down':
+            self.rect.y+=10
+        if self.move == 'left':
+            self.rect.x -=10
+        if self.move == 'right':
+            self.rect.x +=10
+
 
 bg = transform.scale(image.load("model\map\grass_1_new.png"), (WIDTH, HEIGHT))
 player = Player('model\player\centaur_brown_female.png', 350 , 300, 30, 30)
@@ -91,7 +118,9 @@ while run:
         map_X += 1
         map_X = str(map_X)
         player.rect.x = 700 - 35
-        grass.clear()
+        sprites.empty()
+        walss.clear()
+        map_txt='map\map_x'+ map_X +'_y' + map_Y +'.txt'
         with open(map_txt, 'r') as file:
             x, y = 0, 0
             map = file.readlines()
@@ -111,7 +140,9 @@ while run:
         map_X -= 1
         map_X = str(map_X)
         player.rect.x = -3
-        grass.clear()
+        sprites.empty()
+        walss.clear()
+        map_txt='map\map_x'+ map_X +'_y' + map_Y +'.txt'
         with open(map_txt, 'r') as file:
             x, y = 0, 0
             map = file.readlines()
@@ -125,10 +156,49 @@ while run:
                     x += 35
                 y += 35
                 x = 0
-        print(map_X)
     if player.rect.y <= -5:
         player.rect.y = 500
+        map_Y = int(map_Y)
+        map_Y += 1
+        map_Y = str(map_Y)
+        sprites.empty()
+        walss.clear()
+        map_txt='map\map_x'+ map_X +'_y' + map_Y +'.txt'
+        with open(map_txt, 'r') as file:
+            x, y = 0, 0
+            map = file.readlines()
+            for line in map:
+                for symbol in line:
+                    grass.append(Grass(x, y,""),)
+                    if symbol == '1':
+                        objects.append(GameSprite("model\map\sarcophagus_open.png",x,y,35,35))
+                    if symbol =="w":
+                        walss.append(GameSprite("model\map\shallow_water_disturbance.png",x,y,35,35))
+                    x += 35
+                y += 35
+                x = 0
     if player.rect.y >= 505:
         player.rect.y = 0
+        map_Y = int(map_Y)
+        map_Y -= 1
+        map_Y = str(map_Y)
+        sprites.empty()
+        walss.clear()
+        map_txt='map\map_x'+ map_X +'_y' + map_Y +'.txt'
+        with open(map_txt, 'r') as file:
+            x, y = 0, 0
+            map = file.readlines()
+            for line in map:
+                for symbol in line:
+                    grass.append(Grass(x, y,""),)
+                    if symbol == '1':
+                        objects.append(GameSprite("model\map\sarcophagus_open.png",x,y,35,35))
+                    if symbol =="w":
+                        walss.append(GameSprite("model\map\shallow_water_disturbance.png",x,y,35,35))
+                    x += 35
+                y += 35
+                x = 0
+    for i in attaks:
+        i.update()
     display.update()
     clock.tick(FPS)
