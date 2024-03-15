@@ -9,6 +9,7 @@ mixer.music.set_volume(1)
 count = 0
 attaks = []
 sprites = sprite.Group()
+reload = 1
 
 class GameSprite(sprite.Sprite):
     def __init__(self, sprite_img, x, y, width, height):
@@ -38,19 +39,33 @@ class Player(GameSprite):
 
         if pressed[K_d]:
             self.rect.x += 3
-
-        if pressed[K_UP]:
-            attak=Attak('model\wepon\effect\icicle_up.png',self.rect.x,self.rect.y,32,32,'up')
-            attaks.append(attak)
-        if pressed[K_DOWN]:
-            attak=Attak('model\wepon\effect\icicle_down.png',self.rect.x,self.rect.y,32,32,'down')
-            attaks.append(attak)
-        if pressed[K_RIGHT]:
-            attak=Attak('model\wepon\effect\icicle_right.png',self.rect.x,self.rect.y,32,32,'right')
-            attaks.append(attak)
-        if pressed[K_LEFT]:
-            attak=Attak('model\wepon\effect\icicle_left.png',self.rect.x,self.rect.y,32,32,'left')
-            attaks.append(attak)
+        at = True
+        global reload
+        if reload == 1:
+            if pressed[K_UP] and at:
+                attak=Attak('model\wepon\effect\icicle_up.png',self.rect.x,self.rect.y,32,32,'up')
+                attaks.append(attak)
+                at = False
+                reload= 30
+            if pressed[K_DOWN] and at:
+                attak=Attak('model\wepon\effect\icicle_down.png',self.rect.x,self.rect.y,32,32,'down')
+                attaks.append(attak)
+                at = False
+                reload= 30
+            if pressed[K_RIGHT] and at:
+                attak=Attak('model\wepon\effect\icicle_right.png',self.rect.x,self.rect.y,32,32,'right')
+                attaks.append(attak)
+                at = False
+                reload= 30
+            if pressed[K_LEFT] and at:
+                attak=Attak('model\wepon\effect\icicle_left.png',self.rect.x,self.rect.y,32,32,'left')
+                attaks.append(attak)
+                at = False
+                reload= 30
+        for a in attaks:
+            if a.rect.x < -5 or a.rect.x > WIDTH or a.rect.y > HEIGHT or a.rect.y < 0:
+                attaks.remove(a)
+                sprites.remove(a)
         for w in walss:
             if sprite.collide_rect(player, w):
                 self.rect.x, self.rect.y = old_pos
@@ -200,5 +215,7 @@ while run:
                 x = 0
     for i in attaks:
         i.update()
+    if reload != 1 :
+        reload -= 1 
     display.update()
     clock.tick(FPS)
