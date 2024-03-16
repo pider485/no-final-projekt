@@ -1,4 +1,6 @@
+from typing import Any
 from pygame import *
+from random import randint
 mixer.init()
 FPS = 60
 WIDTH, HEIGHT = 700, 525
@@ -8,6 +10,7 @@ mixer.music.play()
 mixer.music.set_volume(1)
 count = 0
 attaks = []
+mobs = []
 sprites = sprite.Group()
 reload = 1
 
@@ -25,6 +28,9 @@ class GameSprite(sprite.Sprite):
 map_X='0'
 map_Y='0'
 class Player(GameSprite):
+    def __init__(self, sprite_img, x, y, width, height,hp):
+        super().__init__(sprite_img, x, y, width, height)
+        self.hp = hp
     def update(self):
         pressed = key.get_pressed()
         old_pos = self.rect.x, self.rect.y
@@ -43,35 +49,49 @@ class Player(GameSprite):
         global reload
         if reload == 1:
             if pressed[K_UP] and at:
-                attak=Attak('model\wepon\effect\icicle_up.png',self.rect.x,self.rect.y,32,32,'up')
+                attak=Attak('model\wepon\effect\icicle_up.png',self.rect.x,self.rect.y,32,32,'up',1)
                 attaks.append(attak)
                 at = False
                 reload= 30
             if pressed[K_DOWN] and at:
-                attak=Attak('model\wepon\effect\icicle_down.png',self.rect.x,self.rect.y,32,32,'down')
+                attak=Attak('model\wepon\effect\icicle_down.png',self.rect.x,self.rect.y,32,32,'down',1)
                 attaks.append(attak)
                 at = False
                 reload= 30
             if pressed[K_RIGHT] and at:
-                attak=Attak('model\wepon\effect\icicle_right.png',self.rect.x,self.rect.y,32,32,'right')
+                attak=Attak('model\wepon\effect\icicle_right.png',self.rect.x,self.rect.y,32,32,'right',1)
                 attaks.append(attak)
                 at = False
                 reload= 30
             if pressed[K_LEFT] and at:
-                attak=Attak('model\wepon\effect\icicle_left.png',self.rect.x,self.rect.y,32,32,'left')
+                attak=Attak('model\wepon\effect\icicle_left.png',self.rect.x,self.rect.y,32,32,'left',1)
                 attaks.append(attak)
                 at = False
                 reload= 30
         for a in attaks:
-            if a.rect.x < -5 or a.rect.x > WIDTH or a.rect.y > HEIGHT or a.rect.y < 0:
-                attaks.remove(a)
+            for mob in mobs:    
+                if a.rect.x < -5 or a.rect.x > WIDTH or a.rect.y > HEIGHT or a.rect.y < 0:
+                    attaks.remove(a)
+                    sprites.remove(a)
+                if sprite.collide_rect(a,mob):
+                    attaks.remove(a)
+                    sprites.remove(a)
+                    mob.hp -=1
+        for a in mobs:
+            if a.hp <=0 :
+                mobs.remove(a)
                 sprites.remove(a)
         for w in walss:
             if sprite.collide_rect(player, w):
                 self.rect.x, self.rect.y = old_pos
 
-
-
+class Mob(GameSprite):
+    def __init__(self, sprite_img, x, y, width, height,hp,damage,xp,status):
+        super().__init__(sprite_img, x, y, width, height)
+        self.hp = hp
+        self.damage = damage
+        self.status = status
+        mobs.append(self)
 class Grass(GameSprite):
     def __init__(self, x , y,view):
         super().__init__('model\map\grass_1_new.png', x, y, 35, 35)
@@ -80,9 +100,10 @@ class Grass(GameSprite):
             self.image=transform.scale(image.load("model\map\cobble_blood_2_old.png"), (35,35))
 
 class Attak(GameSprite):
-    def __init__(self, sprite_img, x, y, width, height,move):
+    def __init__(self, sprite_img, x, y, width, height,move,damage):
         super().__init__(sprite_img, x, y, width, height)
         self.move= move
+        self.damage = damage
     def update(self):
         if self.move == 'up':
             self.rect.y -=10
@@ -95,7 +116,7 @@ class Attak(GameSprite):
 
 
 bg = transform.scale(image.load("model\map\grass_1_new.png"), (WIDTH, HEIGHT))
-player = Player('model\player\centaur_brown_female.png', 350 , 300, 30, 30)
+player = Player('model\player\centaur_brown_female.png', 350 , 300, 30, 30,5)
 
 grass = []
 objects = []
@@ -119,6 +140,7 @@ with open(map_txt, 'r') as file:
 run = True
 clock = time.Clock()
 
+mob = Mob("model\mob\mob.png",randint(0,WIDTH-35),randint(0,HEIGHT-35),35,35,3,1,1,'angry')
 
 while run:
     for e in event.get():
@@ -149,7 +171,8 @@ while run:
                     x += 35
                 y += 35
                 x = 0
-        print(map_X)
+        if map_X != 0 or map_Y !=0:
+            mob = Mob("model\mob\mob.png",randint(0,WIDTH-35),randint(0,HEIGHT-35),35,35,3,1,1,'angry')
     if player.rect.x >= 700 -25:
         map_X = int(map_X)
         map_X -= 1
@@ -171,6 +194,8 @@ while run:
                     x += 35
                 y += 35
                 x = 0
+        if map_X != 0 or map_Y !=0:
+            mob = Mob("model\mob\mob.png",randint(0,WIDTH-35),randint(0,HEIGHT-35),35,35,3,1,1,'angry')
     if player.rect.y <= -5:
         player.rect.y = 500
         map_Y = int(map_Y)
@@ -192,6 +217,8 @@ while run:
                     x += 35
                 y += 35
                 x = 0
+        if map_X != 0 or map_Y !=0:
+            mob = Mob("model\mob\mob.png",randint(0,WIDTH-35),randint(0,HEIGHT-35),35,35,3,1,1,'angry')
     if player.rect.y >= 505:
         player.rect.y = 0
         map_Y = int(map_Y)
@@ -213,9 +240,12 @@ while run:
                     x += 35
                 y += 35
                 x = 0
+        if map_X != 0 or map_Y !=0:
+            mob = Mob("model\mob\mob.png",randint(0,WIDTH-35),randint(0,HEIGHT-35),35,35,3,1,1,'angry')
     for i in attaks:
         i.update()
     if reload != 1 :
         reload -= 1 
+    mob.update()
     display.update()
     clock.tick(FPS)
