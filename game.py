@@ -1,3 +1,4 @@
+import sys
 from typing import Any
 from pygame import *
 from random import randint
@@ -195,6 +196,7 @@ while run:
     for e in event.get():
             if e.type == QUIT:
                 run = False
+                sys.exit()
     if player.hp <=0 :
         window.blit(lose, (240, 250))
         if restart == 0 :
