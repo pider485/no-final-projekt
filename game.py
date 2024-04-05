@@ -239,109 +239,121 @@ while run:
         player.update()
         player.draw()
         if player.rect.x <= -5:
-            map_X = int(map_X)
-            map_X += 1
-            map_X = str(map_X)
-            player.rect.x = 700 - 35
-            sprites.empty()
-            walss.clear()
-            map_txt='map\map_x'+ map_X +'_y' + map_Y +'.txt'
-            for a in mobs:
-                mobs.remove(a)
-                sprites.remove(a)
-            with open(map_txt, 'r') as file:
-                x, y = 0, 0
-                map = file.readlines()
-                for line in map:
-                    for symbol in line:
-                        grass.append(Grass(x, y,""),)
-                        if symbol == '1':
-                            objects.append(GameSprite("model\map\sarcophagus_open.png",x,y,35,35))
-                        if symbol =="w":
-                            walss.append(GameSprite("model\map\shallow_water_disturbance.png",x,y,35,35))
-                        x += 35
-                    y += 35
-                    x = 0
-            if map_X != "0" or map_Y !="0":
-                mob = Mob("model\mob\mob.png",randint(0,WIDTH-35),randint(0,HEIGHT-35),35,35,3,1,1,'angry')
+            if map_X == "1":    
+                player.rect.x += 3
+            else:
+                map_X = int(map_X)
+                map_X += 1
+                map_X = str(map_X)
+                player.rect.x = 700 - 35
+                sprites.empty()
+                walss.clear()
+                map_txt='map\map_x'+ map_X +'_y' + map_Y +'.txt'
+                for a in mobs:
+                    mobs.remove(a)
+                    sprites.remove(a)
+                with open(map_txt, 'r') as file:
+                    x, y = 0, 0
+                    map = file.readlines()
+                    for line in map:
+                        for symbol in line:
+                            grass.append(Grass(x, y,""),)
+                            if symbol == '1':
+                                objects.append(GameSprite("model\map\sarcophagus_open.png",x,y,35,35))
+                            if symbol =="w":
+                                walss.append(GameSprite("model\map\shallow_water_disturbance.png",x,y,35,35))
+                            x += 35
+                        y += 35
+                        x = 0
+                if map_X != "0" or map_Y !="0":
+                    mob = Mob("model\mob\mob.png",randint(0,WIDTH-35),randint(0,HEIGHT-35),35,35,3,1,1,'angry')
         if player.rect.x >= 700 -25:
-            map_X = int(map_X)
-            map_X -= 1
-            map_X = str(map_X)
-            player.rect.x = -3
-            sprites.empty()
-            walss.clear()
-            map_txt='map\map_x'+ map_X +'_y' + map_Y +'.txt'
-            for a in mobs:
-                mobs.remove(a)
-                sprites.remove(a)
-            with open(map_txt, 'r') as file:
-                x, y = 0, 0
-                map = file.readlines()
-                for line in map:
-                    for symbol in line:
-                        grass.append(Grass(x, y,""),)
-                        if symbol == '1':
-                            objects.append(GameSprite("model\map\sarcophagus_open.png",x,y,35,35))
-                        if symbol =="w":
-                            walss.append(GameSprite("model\map\shallow_water_disturbance.png",x,y,35,35))
-                        x += 35
-                    y += 35
-                    x = 0
-            if map_X != "0" or map_Y !="0":
-                mob = Mob("model\mob\mob.png",randint(0,WIDTH-35),randint(0,HEIGHT-35),35,35,3,1,1,'angry')
+            if map_X == "-1":    
+                player.rect.x -= 3
+            else:
+                map_X = int(map_X)
+                map_X -= 1
+                map_X = str(map_X)
+                player.rect.x = -3
+                sprites.empty()
+                walss.clear()
+                map_txt='map\map_x'+ map_X +'_y' + map_Y +'.txt'
+                for a in mobs:
+                    mobs.remove(a)
+                    sprites.remove(a)
+                with open(map_txt, 'r') as file:
+                    x, y = 0, 0
+                    map = file.readlines()
+                    for line in map:
+                        for symbol in line:
+                            grass.append(Grass(x, y,""),)
+                            if symbol == '1':
+                                objects.append(GameSprite("model\map\sarcophagus_open.png",x,y,35,35))
+                            if symbol =="w":
+                                walss.append(GameSprite("model\map\shallow_water_disturbance.png",x,y,35,35))
+                            x += 35
+                        y += 35
+                        x = 0
+                if map_X != "0" or map_Y !="0":
+                    mob = Mob("model\mob\mob.png",randint(0,WIDTH-35),randint(0,HEIGHT-35),35,35,3,1,1,'angry')
         if player.rect.y <= -5:
-            player.rect.y = 500
-            map_Y = int(map_Y)
-            map_Y += 1
-            map_Y = str(map_Y)
-            sprites.empty()
-            walss.clear()
-            map_txt='map\map_x'+ map_X +'_y' + map_Y +'.txt'
-            for a in mobs:
-                mobs.remove(a)
-                sprites.remove(a)
-            with open(map_txt, 'r') as file:
-                x, y = 0, 0
-                map = file.readlines()
-                for line in map:
-                    for symbol in line:
-                        grass.append(Grass(x, y,""),)
-                        if symbol == '1':
-                            objects.append(GameSprite("model\map\sarcophagus_open.png",x,y,35,35))
-                        if symbol =="w":
-                            walss.append(GameSprite("model\map\shallow_water_disturbance.png",x,y,35,35))
-                        x += 35
-                    y += 35
-                    x = 0
-            if map_X != "0" or map_Y !="0":
-                mob = Mob("model\mob\mob.png",randint(0,WIDTH-35),randint(0,HEIGHT-35),35,35,3,1,1,'angry')
+            if map_Y == "1":    
+                player.rect.y += 3
+            else:
+                player.rect.y = 500
+                map_Y = int(map_Y)
+                map_Y += 1
+                map_Y = str(map_Y)
+                sprites.empty()
+                walss.clear()
+                map_txt='map\map_x'+ map_X +'_y' + map_Y +'.txt'
+                for a in mobs:
+                    mobs.remove(a)
+                    sprites.remove(a)
+                with open(map_txt, 'r') as file:
+                    x, y = 0, 0
+                    map = file.readlines()
+                    for line in map:
+                        for symbol in line:
+                            grass.append(Grass(x, y,""),)
+                            if symbol == '1':
+                                objects.append(GameSprite("model\map\sarcophagus_open.png",x,y,35,35))
+                            if symbol =="w":
+                                walss.append(GameSprite("model\map\shallow_water_disturbance.png",x,y,35,35))
+                            x += 35
+                        y += 35
+                        x = 0
+                if map_X != "0" or map_Y !="0":
+                    mob = Mob("model\mob\mob.png",randint(0,WIDTH-35),randint(0,HEIGHT-35),35,35,3,1,1,'angry')
         if player.rect.y >= 505:
-            player.rect.y = 0
-            map_Y = int(map_Y)
-            map_Y -= 1
-            map_Y = str(map_Y)
-            sprites.empty()
-            walss.clear()
-            map_txt='map\map_x'+ map_X +'_y' + map_Y +'.txt'
-            for a in mobs:
-                mobs.remove(a)
-                sprites.remove(a)
-            with open(map_txt, 'r') as file:
-                x, y = 0, 0
-                map = file.readlines()
-                for line in map:
-                    for symbol in line:
-                        grass.append(Grass(x, y,""),)
-                        if symbol == '1':
-                            objects.append(GameSprite("model\map\sarcophagus_open.png",x,y,35,35))
-                        if symbol =="w":
-                            walss.append(GameSprite("model\map\shallow_water_disturbance.png",x,y,35,35))
-                        x += 35
-                    y += 35
-                    x = 0
-            if map_X != "0" or map_Y !="0":
-                mob = Mob("model\mob\mob.png",randint(0,WIDTH-35),randint(0,HEIGHT-35),35,35,3,1,1,'angry')
+            if map_Y == "-1":    
+                player.rect.y -= 3
+            else:
+                player.rect.y = 0
+                map_Y = int(map_Y)
+                map_Y -= 1
+                map_Y = str(map_Y)
+                sprites.empty()
+                walss.clear()
+                map_txt='map\map_x'+ map_X +'_y' + map_Y +'.txt'
+                for a in mobs:
+                    mobs.remove(a)
+                    sprites.remove(a)
+                with open(map_txt, 'r') as file:
+                    x, y = 0, 0
+                    map = file.readlines()
+                    for line in map:
+                        for symbol in line:
+                            grass.append(Grass(x, y,""),)
+                            if symbol == '1':
+                                objects.append(GameSprite("model\map\sarcophagus_open.png",x,y,35,35))
+                            if symbol =="w":
+                                walss.append(GameSprite("model\map\shallow_water_disturbance.png",x,y,35,35))
+                            x += 35
+                        y += 35
+                        x = 0
+                if map_X != "0" or map_Y !="0":
+                    mob = Mob("model\mob\mob.png",randint(0,WIDTH-35),randint(0,HEIGHT-35),35,35,3,1,1,'angry')
         for i in attaks:
             i.update()
         if reload != 1 :
